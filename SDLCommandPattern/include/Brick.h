@@ -1,6 +1,7 @@
 #pragma Once
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <iostream>
+
 class Brick
 {
 public:
@@ -47,5 +48,18 @@ public:
     void Draw() 
     {
         std::cout << "New Concrete Brick" << std::endl;
+    };
+};
+
+class WoodBrick : public Brick
+{
+public:
+
+    WoodBrick(){};
+    ~WoodBrick(){};
+
+    void Draw() 
+    {
+        std::cout << "New Wood Brick" << std::endl;
     };
 };

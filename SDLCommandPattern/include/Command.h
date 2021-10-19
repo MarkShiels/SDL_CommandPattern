@@ -1,5 +1,8 @@
 #pragma Once
-#include "ClayFactory.h"
+#include "../include/ClayFactory.h"
+#include "../include/ConcreteFactory.h"
+#include "../include/WoodFactory.h"
+#include "../include/LegoFactory.h"
 
 class Command
 {
@@ -17,4 +20,37 @@ public:
 private:
 
     ClayFactory factory;
+};
+
+class LegoBrickCommand : public Command
+{
+public:
+
+    Brick* execute() { return factory.NewBrick(); };
+
+private:
+
+    LegoFactory factory;
+};
+
+class ConcreteBrickCommand : public Command
+{
+public:
+
+    Brick* execute() { return factory.NewBrick(); };
+
+private:
+
+    ConcreteFactory factory;
+};
+
+class WoodBrickCommand : public Command
+{
+public:
+
+    Brick* execute() { return factory.NewBrick(); };
+
+private:
+
+    WoodFactory factory;
 };

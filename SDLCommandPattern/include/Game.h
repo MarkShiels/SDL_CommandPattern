@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <iostream>
 #include "../include/LegoFactory.h"
 #include "../include/ClayFactory.h"
@@ -21,8 +21,17 @@ private:
 
     void cleanUp();
 
+    bool m_gameIsRunning;
+    float screenSizeX = 680;
+    float screenSizeY = 480;
+    
     Command* fireClayBrick;
     std::vector<Brick*> clayBricks;
-    bool m_gameIsRunning;
+    Command* pourConcreteBrick;
+    std::vector<Brick*> concreteBricks;
+    Command* castLegoBrick;
+    std::vector<Brick*> legoBricks;
+    Command* sawWoodBrick;
+    std::vector<Brick*> woodBricks;
 
 };

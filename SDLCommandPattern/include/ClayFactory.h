@@ -12,5 +12,4 @@ public:
     Brick* NewBrick();
    
 };
-
 #endif
