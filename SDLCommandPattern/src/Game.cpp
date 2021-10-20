@@ -14,11 +14,61 @@ Game::Game() :
     if(!window) {
         std::cout << "Failed to create window.\n";}
 
-    fireClayBrick = new ClayBrickCommand; 
-    pourConcreteBrick = new ConcreteBrickCommand;
-    sawWoodBrick = new WoodBrickCommand;
-    castLegoBrick = new LegoBrickCommand;
+    if ( TTF_Init() < 0 ) {
+	    std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
+    }
+
+    m_renderer = SDL_CreateRenderer(window, -1, 0);
         
+
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = screenSizeX/2;
+    rect.h = screenSizeY/2;
+
+    rect2.x = screenSizeX/2;
+    rect2.y = screenSizeY/2;
+    rect2.w = screenSizeX/2;
+    rect2.h = screenSizeY/2;
+
+    rect3.x = 0;
+    rect3.y = screenSizeY/2;
+    rect3.w = screenSizeX/2;
+    rect3.h = screenSizeY/2;
+
+    rect4.x = screenSizeX/2;
+    rect4.y = 0;
+    rect4.w = screenSizeX/2;
+    rect4.h = screenSizeY/2;
+
+    highman = TTF_OpenFont("../include/highman.ttf", 2500);
+    if(!highman)
+    {
+        std::cout << "error loading highman" <<std::endl;
+    }
+
+    white = {255, 255, 255};
+
+    clayMessage.x = 10; 
+    clayMessage.y = 0; 
+    clayMessage.w = 280; 
+    clayMessage.h = 250; 
+
+    legoMessage.x = (screenSizeX / 2) + 10;
+    legoMessage.y = screenSizeY / 2;
+    legoMessage.w = 280;
+    legoMessage.h = 250;
+
+    woodMessage.x = (screenSizeX / 2) + 10;
+    woodMessage.y = 0;
+    woodMessage.w = 280;
+    woodMessage.h = 250;
+
+    concreteMessage.x = 10;
+    concreteMessage.y = screenSizeY / 2;
+    concreteMessage.w = 280;
+    concreteMessage.h = 250;
+
 }
     
 Game::~Game()
@@ -45,52 +95,46 @@ void Game::processEvents(SDL_Event gameEvent)
     { 
         if(gameEvent.type == SDL_MOUSEBUTTONUP)
         {
-            int mPosX, mPosY;
-            SDL_GetMouseState(&mPosX, &mPosY);
-
-            if(mPosX < screenSizeX / 2 && mPosY < screenSizeY /2)
-            {
-                clayBricks.push_back(fireClayBrick->execute());
-                std::string brickNum = std::to_string(clayBricks.size());
-                std::string numBricks = "Clay Bricks: " + brickNum;
-                std::cout << numBricks.c_str() << std::endl;
-            }
-            else if(mPosX < screenSizeX / 2 && mPosY > screenSizeY /2)
-            {
-                concreteBricks.push_back(pourConcreteBrick->execute());
-                std::string brickNum = std::to_string(concreteBricks.size());
-                std::string numBricks = "Concrete Bricks: " + brickNum;
-                std::cout << numBricks.c_str() << std::endl;
-            }
-            else if(mPosX > screenSizeX / 2 && mPosY < screenSizeY /2)
-            {
-                woodBricks.push_back(sawWoodBrick->execute());
-                std::string brickNum = std::to_string(woodBricks.size());
-                std::string numBricks = "Wood Bricks: " + brickNum;
-                std::cout << numBricks.c_str() << std::endl;
-            }
-            else if(mPosX > screenSizeX / 2 && mPosY > screenSizeY /2)
-            {
-                legoBricks.push_back(castLegoBrick->execute());
-                std::string brickNum = std::to_string(legoBricks.size());
-                std::string numBricks = "Lego Bricks: " + brickNum;
-                std::cout << numBricks.c_str() << std::endl;
-            }
+            inputHandler.handleInput(&gameEvent);          
         }
     }
 }
 
 void Game::update()
-{
-    // printf("update");
-}
+{}
 
 void Game::render()
 {
 
+    SDL_RenderClear(m_renderer);
+
+    SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(m_renderer, &rect);
+    SDL_RenderDrawRect(m_renderer, &rect2);
+    SDL_RenderDrawRect(m_renderer, &rect3);
+    SDL_RenderDrawRect(m_renderer, &rect4);
+
+    messageSurface  = TTF_RenderText_Solid(highman, "Clay Brick", white); 
+    messageTxtr = SDL_CreateTextureFromSurface(m_renderer,messageSurface);
+    SDL_RenderCopy(m_renderer, messageTxtr, NULL, &clayMessage);   
+
+    messageSurface  = TTF_RenderText_Solid(highman, "Lego Brick", white); 
+    messageTxtr = SDL_CreateTextureFromSurface(m_renderer,messageSurface);
+    SDL_RenderCopy(m_renderer, messageTxtr, NULL, &legoMessage);
+  
+    messageSurface  = TTF_RenderText_Solid(highman, "Wood Brick", white); 
+    messageTxtr = SDL_CreateTextureFromSurface(m_renderer,messageSurface);
+    SDL_RenderCopy(m_renderer, messageTxtr, NULL, &woodMessage);
+   
+    messageSurface  = TTF_RenderText_Solid(highman, "Concrete Brick", white); 
+    messageTxtr = SDL_CreateTextureFromSurface(m_renderer,messageSurface);
+    SDL_RenderCopy(m_renderer, messageTxtr, NULL, &concreteMessage);
+
+    SDL_SetRenderDrawColor(m_renderer, 0,0,0, 255);
+    SDL_RenderPresent(m_renderer);
+
+
 }
 
 void Game::cleanUp()
-{
-    
-}
+{}
